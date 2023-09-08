@@ -19,7 +19,9 @@ from django.urls import path, include
 from users import router as user_api_router
 from django.conf import settings
 
-auth_api_urls = []
+auth_api_urls = [
+    path('auth/', include('drf_social_oauth2.urls')),
+]
 
 if settings.DEBUG:
     auth_api_urls.append(path('verify', include('rest_framework.urls')))
@@ -31,5 +33,5 @@ api_url_pattern = [
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(api_url_pattern)),
-    path("auth/", include(auth_api_urls))
+    path("auth/", include(auth_api_urls)),
 ]
