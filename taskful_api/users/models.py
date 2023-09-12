@@ -4,6 +4,7 @@ from django.utils.deconstruct import deconstructible
 import os
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save
+from house.models import House
 
 @deconstructible
 class GenerateProfileImagePath(object):
@@ -20,6 +21,7 @@ user_profile_imag_path = GenerateProfileImagePath()
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=user_profile_imag_path, blank=True, null=True)
+    house = models.ForeignKey(House, on_delete=models.SET_NULL, blank=True, null=True, related_name='members')
 
     def __str__(self):
         return self.user.username

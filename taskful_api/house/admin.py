@@ -4,6 +4,6 @@ from .models import House
 # Register your models here.
 
 class HouseAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in House._meta.get_fields()]
+    list_display = ['id', 'name']
 
 admin.site.register(House, HouseAdmin)

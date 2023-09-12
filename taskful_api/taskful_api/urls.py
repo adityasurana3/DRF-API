@@ -19,6 +19,7 @@ from django.urls import path, include
 from users import router as user_api_router
 from django.conf import settings
 from house import router as house_api_router
+from django.conf.urls.static import static
 
 auth_api_urls = [
     path('auth/', include('drf_social_oauth2.urls')),
@@ -37,3 +38,5 @@ urlpatterns = [
     path('api/', include(api_url_pattern)),
     path("auth/", include(auth_api_urls)),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

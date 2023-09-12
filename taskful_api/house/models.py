@@ -29,3 +29,6 @@ class House(models.Model):
     not_completed_tasks_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self) -> str:
+        return f'{self.id} | {self.name}'
