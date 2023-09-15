@@ -19,6 +19,7 @@ from django.urls import path, include
 from users import router as user_api_router
 from django.conf import settings
 from house import router as house_api_router
+from task import router as task_api_router
 from django.conf.urls.static import static
 
 auth_api_urls = [
@@ -30,7 +31,8 @@ if settings.DEBUG:
 
 api_url_pattern = [
     path('accounts/', include(user_api_router.router.urls)),
-    path('houses/', include(house_api_router.router.urls))
+    path('houses/', include(house_api_router.router.urls)),
+    path('task/', include(task_api_router.router.urls))
 ]
 
 urlpatterns = [

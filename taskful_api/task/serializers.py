@@ -7,5 +7,17 @@ class TaskListSerializer(serializers.ModelSerializer):
     status = serializers.HyperlinkedRelatedField(read_only=True, many=False, view_name='profile-detail')
     class Meta:
         model = TaskList
-        fields = ['url','id', 'name', 'description', 'status', 'created_on', 'created_by', 'house']
-        read_only_fields = ['created_on', 'status']
+        fields = ['url','id', 'name', 'description', 'status', 'created_at', 'created_by', 'house']
+        read_only_fields = ['created_at', 'status']
+        
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ['url', 'id', 'name', 'description']
+        read_only_fields = []
+        
+class AttachmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attachment
+        fields = []
+        read_only_fields = []
