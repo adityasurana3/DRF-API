@@ -4,6 +4,8 @@ from house.models import House
 import uuid
 import os
 from django.utils.deconstruct import deconstructible
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
 
 # Create your models here.
 
@@ -62,3 +64,27 @@ class Attachment(models.Model):
     
     def __str__(self) -> str:
         return f"{self.id} | {self.task}"
+    
+
+# Signals
+
+@receiver(post_save, sender=Task)
+def update_house_point(sender, instance, created, **kwargs):
+    house = instance.task_list.house
+    if instance.status == COMPLETE:
+        house.point += 10
+    elif instance.statud == NOT_COMPLETE:
+        if house.status > 10:
+            house.point -= 10
+    house.save()
+    
+@receiver(post_save, sender=Task)
+def update_tasklist_status(sender, instance, created, **kwargs):
+    task_list = instance.task_list
+    is_complete = True
+    for task in task_list.tasks.all():
+        if task.status != COMPLETE:
+            is_complete = False
+            break
+    task_list.status = COMPLETE if is_complete else NOT_COMPLETE
+    task_list.save()
