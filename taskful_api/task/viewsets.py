@@ -1,4 +1,4 @@
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, filters
 from .models import Task, TaskList, Attachment, COMPLETE, NOT_COMPLETE
 from rest_framework import status as st
 from rest_framework.response import Response
@@ -6,6 +6,7 @@ from .serializers import TaskListSerializer, TaskSerializer, AttachmentSerialize
 from .permissions import IsAllowedToEditTaskListElseNone, IsAllowedToEditTaskElseNone, IsAllowedToEditAttachmentElseNone
 from rest_framework.decorators import action
 from django.utils import timezone
+from django_filters.rest_framework.backends import DjangoFilterBackend
 
 
 class TaskListViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
@@ -21,6 +22,10 @@ class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = [IsAllowedToEditTaskElseNone]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
+    search_fields = ['name', 'description']
+    ordering_fields = ['points', 'completed_tasks_count', 'notcompleted_tasks_count']
+    filterset_fields = ['status', ]
     
     def get_queryset(self):
         queryset =  super(TaskViewSet, self).get_queryset()

@@ -1,15 +1,19 @@
-from rest_framework import viewsets,status
+from rest_framework import viewsets,status, filters
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from .models import House
 from .serializers import HouseSerializer
 from .permissions import IsHouseManagerOrNone
 from rest_framework.decorators import action
+from django_filters.rest_framework.backends import DjangoFilterBackend
 
 class HouseViewSet(viewsets.ModelViewSet):
     queryset = House.objects.all()
     serializer_class = HouseSerializer
     permission_classes = [IsHouseManagerOrNone]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['name', 'description']
+    filterset_fields = ['members',]
     
     @action(detail=True, methods=['POST'], name='Join', permission_classes=[])
     def join(self, request, pk=None):
